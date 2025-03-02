@@ -1,0 +1,974 @@
+@font-face {
+    font-family: 'OzelFont';
+    src: url('https://pub-e611e3e1be664dc4ab2d09014408e565.r2.dev/classic/GalanoGrotesqueBold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Tüm elementler için font ayarı */
+* {
+    font-family: 'OzelFont', sans-serif !important;
+    color: #fff
+}
+
+:root {
+    --orange: #ff6b00;
+    --navy: #001f3f;
+    --dark-blue: #0c1a2c;
+    --orange-dark: #E45A00;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg,
+        var(--dark-blue) 0%,
+        var(--dark-blue) 35%,
+        color-mix(in srgb, var(--dark-blue) 70%, var(--orange-dark)) 50%,
+        var(--orange-dark) 65%,
+        var(--orange-dark) 100%
+    );
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.logo-container a {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-container a:hover {
+    transform: scale(1.05);
+}
+
+.main-logo {
+    height: 60px; 
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    z-index: 999;
+    margin-top: -100px; /* Changed from -50px to -100px */
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;  /* changed from visible to hidden */
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.carousel-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    width: 350px;
+    height: 450px;
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); /* Updated timing function and duration */
+    opacity: 0;
+    transform: translateX(100%) scale(0.8);
+    z-index: 2; /* Add z-index to make slides clickable */
+}
+
+.slide.prev {
+    transform: translateX(-80%) scale(0.8) rotate(-10deg); /* Changed from -60% to -80% */
+    opacity: 0.6; /* Increased from 0.5 to 0.6 for better visibility */
+    z-index: 1;
+    transform-origin: right center; /* Set rotation origin */
+}
+
+.slide.active {
+    transform: translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+    z-index: 2;
+    cursor: pointer; /* Add cursor pointer for active slide */
+}
+
+.slide.next {
+    transform: translateX(80%) scale(0.8) rotate(10deg); /* Changed from 60% to 80% */
+    opacity: 0.6; /* Increased from 0.5 to 0.6 for better visibility */
+    z-index: 1;
+    transform-origin: left center; /* Set rotation origin */
+}
+
+.slide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+    border-radius: 12px;
+    z-index: 1; /* Lower z-index than slide content */
+    pointer-events: none; /* Make gradient non-blocking */
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent; /* Remove background */
+    color: rgba(255, 255, 255, 0.8); /* Make icons slightly transparent */
+    border: none;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: none; /* Remove blur effect */
+    transition: all 0.3s ease;
+}
+
+.carousel-button svg {
+    width: 40px;
+    height: 40px;
+    stroke-width: 1.5;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); /* Add shadow to icon */
+}
+
+.carousel-button.prev {
+    left: 200px; /* Changed from 20px */
+}
+
+.carousel-button.next {
+    right: 200px; /* Changed from 20px */
+}
+
+.carousel-button:hover {
+    color: white; /* Full opacity on hover */
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Add pagination styles */
+.pagination {
+    position: absolute;
+    bottom: 1px;  /* Changed from -30px to 30px */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;  /* Increased z-index to ensure visibility */
+}
+
+.dot {
+    width: 12px; /* Slightly larger dots */
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);  /* Made inactive dots more transparent */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  /* Added shadow for better visibility */
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Add banner styles */
+.bottom-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(50, 50, 50, 0.4); /* Changed to gray with 40% opacity */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 40px;
+    padding: 0 40px;
+    color: white;
+    font-size: 18px;
+    box-shadow: none; /* Removed shadow */
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Optional: adds a slight blur effect behind the banner */
+}
+
+.banner-text {
+    text-align: center;
+    flex: 1;
+    margin-left: -120px; /* Offset to center the text accounting for links */
+}
+
+.banner-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+.policy-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.policy-link:hover {
+    opacity: 1;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: rgba(0, 0, 0, 0.5); /* Changed from 0.75 to 0.5 */
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 80%;
+    width: 900px;
+    height: 80vh;
+    position: relative;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-text {
+    height: calc(100% - 80px);
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+.modal-text::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-text::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.modal-text::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.modal h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.modal-text p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.modal-text li {
+    font-size: 16px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+.modal h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.modal-text {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+.modal-text ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.modal-text li {
+    margin-bottom: 8px;
+    opacity: 0.85;
+}
+
+.modal-text h3 {
+    color: white;
+    font-size: 20px;
+    margin: 25px 0 15px;
+}
+
+.modal-text p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.modal-text ul {
+    margin-bottom: 20px;
+}
+
+.modal-text .last-update {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 25px;
+}
+
+.modal-text h3 {
+    color: var(--orange);
+    font-size: 20px;
+    margin: 30px 0 15px;
+}
+
+.modal-text h3:first-of-type {
+    margin-top: 15px;
+}
+
+.copyright {
+    opacity: 0.7;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.banner-seal {
+    height: 40px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.8;
+}
+
+.banner-images {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row-reverse; /* Changed: reverses the order of items */
+    z-index: 1000;
+}
+
+.banner-age {
+    height: 50px;
+    opacity: 0.8;
+    filter: brightness(0) invert(1); /* Makes the image white */
+    margin-right: 100px; /* Added: moves age icon closer to seal */
+}
+
+.seal-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.seal-link:hover .banner-seal {
+    opacity: 1;
+}
+
+.auth-buttons {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 21;
+}
+
+.auth-button {
+    padding: 12px 35px;
+    background: rgba(228, 90, 0, 0.15);
+    border: 1.5px solid var(--dark-blue);
+    border-radius: 25px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.auth-button:hover {
+    background: rgba(228, 90, 0, 0.25);
+    transform: scale(1.05);
+    box-shadow: 0 2px 10px rgba(228, 90, 0, 0.2);
+}
+
+.zoom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 1500;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease; /* Changed from 0.5s to 0.3s for faster out animation */
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Makes overlay non-blocking */
+}
+
+.zoom-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(0.5);
+    opacity: 0;
+    transition: none; /* Remove default transition for cleaner animations */
+}
+
+/* Add enter/exit animations for bonanza */
+.zoom-overlay.active .zoom-image {
+    animation: bonanzaEnter 0.5s ease-out forwards;
+}
+
+.zoom-overlay:not(.active) .zoom-image {
+    animation: bonanzaExit 0.3s ease-in forwards;
+}
+
+/* Add enter/exit animations for live */
+.zoom-overlay.live-variant.active .zoom-image {
+    animation: liveEnter 0.5s ease-out forwards;
+}
+
+.zoom-overlay.live-variant:not(.active) .zoom-image {
+    animation: liveExit 0.3s ease-in forwards;
+}
+
+@keyframes bonanzaEnter {
+    0% {
+        transform: scale(0.5) translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+}
+
+@keyframes bonanzaExit {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.5) translateY(20px);
+        opacity: 0;
+    }
+}
+
+@keyframes liveEnter {
+    0% {
+        transform: scale(0.5) translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+}
+
+@keyframes liveExit {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.5) translateY(-20px);
+        opacity: 0;
+    }
+}
+
+/* Add new animation variant for live elements */
+.zoom-overlay.live-variant .zoom-image {
+    transform-origin: center;
+    animation: liveEnter 0.5s ease-out forwards;
+}
+
+@keyframes liveEnter {
+    0% {
+        transform: scale(0.5) translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+}
+
+/* Add slot variant animations */
+.zoom-overlay.slot-variant.active .zoom-image {
+    animation: slotEnter 0.5s ease-out forwards;
+}
+
+.zoom-overlay.slot-variant:not(.active) .zoom-image {
+    animation: slotExit 0.3s ease-in forwards;
+}
+
+@keyframes slotEnter {
+    0% {
+        transform: scale(0.5) translateX(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateX(0);
+        opacity: 0.8;
+    }
+}
+
+@keyframes slotExit {
+    0% {
+        transform: scale(1) translateX(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.5) translateX(20px);
+        opacity: 0;
+    }
+}
+
+/* Add styles for social media icons */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-left: auto;
+    padding-right: 60px; /* Increased from 50px to 60px */
+    position: relative;
+    z-index: 2000; /* Changed from 1001 to 2000 to appear above zoom-overlay (1500) */
+}
+
+.social-link {
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Add styles for slide links */
+.slide-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative; /* Add position relative */
+    z-index: 3; /* Add z-index higher than slide */
+    /* Add orange border */
+    border: 2px solid var(--orange);
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.slide.active .slide-link {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    /* Enhance border for active slide */
+    border: 3px solid var(--orange);
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+}
+
+.slide.active .slide-link:hover {
+    transform: scale(1.02);
+    /* Enhance glow effect on hover */
+    box-shadow: 0 0 25px rgba(255, 107, 0, 0.5);
+}
+
+/* Update existing slide img styles */
+.slide-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px; /* Slightly smaller to account for border */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Add cursor styles for clickable elements */
+.slide-link,
+.carousel-button,
+.auth-button,
+.policy-link,
+.social-link,
+.seal-link,
+.logo-container a,
+.dot {
+    cursor: pointer;
+}
+
+/* Add hover cursor for active slide */
+.slide.active {
+    cursor: pointer;
+}
+
+/* Optional: Add custom cursor for clickable elements */
+.slide-link:hover,
+.carousel-button:hover,
+.auth-button:hover,
+.policy-link:hover,
+.social-link:hover,
+.seal-link:hover,
+.logo-container a:hover,
+.dot:hover {
+    cursor: pointer;
+}
+
+/* Add redirect overlay styles */
+.redirect-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.redirect-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.redirect-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+    border: none;
+    z-index: 10000;
+}
+
+.redirect-text {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 28px;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    pointer-events: none;
+}
+
+@media (max-width: 1200px) {
+    .slide {
+        width: 300px;
+        height: 400px;
+    }
+    
+    .carousel-button.prev {
+        left: 100px;
+    }
+    
+    .carousel-button.next {
+        right: 100px;
+    }
+
+    .slide.prev {
+        transform: translateX(-70%) scale(0.8) rotate(-10deg); /* Adjusted for smaller screens */
+    }
+    
+    .slide.next {
+        transform: translateX(70%) scale(0.8) rotate(10deg); /* Adjusted for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel {
+        height: 400px;
+    }
+    
+    .slide {
+        width: 250px;
+        height: 350px;
+    }
+    
+    .carousel-button.prev {
+        left: 20px;
+    }
+    
+    .carousel-button.next {
+        right: 20px;
+    }
+    
+    .container {
+        margin-top: -60px; /* Changed from -30px to -60px */
+    }
+    
+    .bottom-banner {
+        height: 50px;
+        font-size: 16px;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .banner-text {
+        margin-left: 0;
+        font-size: 14px;
+    }
+    
+    .policy-link {
+        font-size: 12px;
+    }
+
+    .modal-content {
+        max-width: 95%;
+        height: 90vh;
+        padding: 20px;
+    }
+    
+    .modal h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .main-logo {
+        height: 30px; /* Changed from 60px to 30px */
+    }
+
+    .banner-seal {
+        height: 30px;
+    }
+
+    .banner-age {
+        height: 25px;
+    }
+    
+    .banner-images {
+        gap: 8px;
+    }
+
+    .copyright {
+        font-size: 12px;
+    }
+
+    .auth-buttons {
+        bottom: 70px;
+        gap: 10px;
+    }
+    
+    .auth-button {
+        padding: 10px 25px;
+        font-size: 14px;
+    }
+
+    .zoom-image {
+        content: url('bonanza_elems_mob.png');
+        transition: all 0.3s ease-out, opacity 0.15s ease-out; /* Added separate opacity transition */
+    }
+
+    .zoom-overlay.live-variant .zoom-image {
+        animation: liveEnterMobile 0.5s ease-out forwards;
+    }
+    
+    @keyframes liveEnterMobile {
+        0% {
+            transform: scale(0.5) translateY(-10px);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateY(0);
+            opacity: 0.8;
+        }
+    }
+
+    .social-icons {
+        padding-right: 30px; /* Increased from 25px to 30px for mobile */
+        gap: 12px;
+    }
+
+    .social-link svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .zoom-overlay.active .zoom-image {
+        animation: bonanzaEnterMobile 0.5s ease-out forwards;
+    }
+    
+    .zoom-overlay:not(.active) .zoom-image {
+        animation: bonanzaExitMobile 0.3s ease-in forwards;
+    }
+    
+    .zoom-overlay.live-variant.active .zoom-image {
+        animation: liveEnterMobile 0.5s ease-out forwards;
+    }
+    
+    .zoom-overlay.live-variant:not(.active) .zoom-image {
+        animation: liveExitMobile 0.3s ease-in forwards;
+    }
+
+    @keyframes bonanzaEnterMobile {
+        0% {
+            transform: scale(0.5) translateY(10px);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateY(0);
+            opacity: 0.8;
+        }
+    }
+
+    @keyframes bonanzaExitMobile {
+        0% {
+            transform: scale(1) translateY(0);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(0.5) translateY(10px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes liveEnterMobile {
+        0% {
+            transform: scale(0.5) translateY(-10px);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateY(0);
+            opacity: 0.8;
+        }
+    }
+
+    @keyframes liveExitMobile {
+        0% {
+            transform: scale(1) translateY(0);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(0.5) translateY(-10px);
+            opacity: 0;
+        }
+    }
+
+    .zoom-overlay.slot-variant.active .zoom-image {
+        animation: slotEnterMobile 0.5s ease-out forwards;
+    }
+    
+    .zoom-overlay.slot-variant:not(.active) .zoom-image {
+        animation: slotExitMobile 0.3s ease-in forwards;
+    }
+
+    @keyframes slotEnterMobile {
+        0% {
+            transform: scale(0.5) translateX(10px);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateX(0);
+            opacity: 0.8;
+        }
+    }
+
+    @keyframes slotExitMobile {
+        0% {
+            transform: scale(1) translateX(0);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(0.5) translateX(10px);
+            opacity: 0;
+        }
+    }
+
+    .slide.prev {
+        transform: translateX(-65%) scale(0.8) rotate(-10deg); /* Adjusted for mobile */
+    }
+    
+    .slide.next {
+        transform: translateX(65%) scale(0.8) rotate(10deg); /* Adjusted for mobile */
+    }
+}
